@@ -1,34 +1,48 @@
-# Resend PHP
-
+# Neon PHP SDK
 
 ## Examples
-
-Send email with:
-
 - [PHP](example/README.md)
-- [Laravel](https://github.com/resend/resend-laravel-example)
+
+## Table of Contents
+- [Get Started](#get-started)
+- [Usage](#usage)
+  - [ApiKeys Resource](#apikes-resource)
+
+
 
 ## Getting started
 
 > **Requires [PHP 8.2+](https://php.net/releases/)**
 
-First, install Resend via the [Composer](https://getcomposer.org/) package manager:
+First, install via the [Composer](https://getcomposer.org/) package manager:
 
 ```bash
 composer require liucf/neon-sdk-php
 ```
 
-Then, interact with Resend's API:
+Then, interact with Neon's API:
 
+## Usage
+
+### `ApiKeys` Resource
+
+#### `list`
 ```php
 $neon = Neon::client('napi_123456789');
 
-$resend->emails->send([
-    'from' => 'onboarding@resend.dev',
-    'to' => 'user@gmail.com',
-    'subject' => 'hello world',
-    'text' => 'it works!',
-]);
+$neon->ApiKeys()->list();
+```
+
+#### `create`
+```php
+$neon = Neon::client('napi_123456789');
+$neon->ApiKeys()->create(['key_name' => 'Test API Key from SDK']);
+```
+
+#### `revoke`
+```php
+$neon = Neon::client('napi_123456789');
+$neon->ApiKeys()->revoke('2188549');
 ```
 
 > **Note**

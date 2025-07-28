@@ -1,6 +1,6 @@
-# Resend with PHP
+# Neon with PHP
 
-This example shows how to use Resend with [PHP](https://www.php.net).
+This example shows how to use Neon with [PHP](https://www.php.net).
 
 ## Prerequisites
 
