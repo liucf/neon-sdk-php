@@ -3,8 +3,15 @@
     "description": "Neon PHP example",
     "type": "project",
     "require": {
-        "liucf/neon-sdk-php": "*"
+        "liucf/neon-sdk-php": "@dev"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../",
+            "options": { "symlink": true }
+        }
+    ],
     "license": "MIT",
     "minimum-stability": "stable"
 }

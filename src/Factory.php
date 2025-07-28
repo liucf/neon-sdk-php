@@ -2,19 +2,13 @@
 
 namespace Neon;
 
-use Closure;
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
-use Http\Discovery\Psr18ClientDiscovery;
 use Neon\Transporters\HttpTransporter;
 use Neon\ValueObjects\ApiKey;
 use Neon\ValueObjects\Transporter\BaseUri;
 use Neon\ValueObjects\Transporter\Headers;
 use Neon\ValueObjects\Transporter\QueryParams;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\HttpClient\Psr18Client;
 
 final class Factory
 {
@@ -47,7 +41,6 @@ final class Factory
      */
     private array $queryParams = [];
 
-
     /**
      * Sets the API key for the requests.
      */
@@ -57,7 +50,6 @@ final class Factory
 
         return $this;
     }
-
 
     /**
      * Sets the HTTP client for the requests.

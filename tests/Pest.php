@@ -18,51 +18,8 @@ use Neon\ValueObjects\Transporter\BaseUri;
 use Neon\ValueObjects\Transporter\Headers;
 use Neon\ValueObjects\Transporter\Payload;
 use Neon\ValueObjects\Transporter\QueryParams;
-use Neon\ValueObjects\Transporter\Response;
-use Psr\Http\Message\ResponseInterface;
 
-// function mockClient(string $method, string $resource, array $parameters, array $rawHeaders, Response|ResponseInterface|string $response, $methodName = 'request')
-// {
-//     $transporter = Mockery::mock(TransporterContract::class);
-
-//     $transporter
-//         ->shouldReceive($methodName)
-//         ->once()
-//         ->withArgs(function (Payload $payload) use ($method, $resource, $parameters, $rawHeaders) {
-//             $baseUri = BaseUri::from('api.resend.com');
-//             $headers = Headers::withAuthorization(ApiKey::from('foo'));
-
-//             $request = $payload->toRequest($baseUri, $headers);
-
-//             if ($method === 'POST' || $method === 'PATCH' || $method === 'PUT') {
-//                 $expectedBody = ($parameters === [] || ! array_is_list($parameters))
-//                     ? json_encode((object) $parameters, JSON_THROW_ON_ERROR)
-//                     : json_encode($parameters, JSON_THROW_ON_ERROR);
-
-//                 if ((string) $request->getBody() !== $expectedBody) {
-//                     return false;
-//                 }
-//             }
-
-//             if (array_key_exists('Idempotency-Key', $rawHeaders)) {
-//                 if (! $request->hasHeader('Idempotency-Key')) {
-//                     return false;
-//                 }
-
-//                 if ($request->getHeader('Idempotency-Key')[0] !== $rawHeaders['Idempotency-Key']) {
-//                     return false;
-//                 }
-//             }
-
-//             return $request->getMethod() === $method
-//                 && $request->getHeader('User-Agent')[0] === 'resend-php/' . Neon::VERSION
-//                 && $request->getUri()->getPath() === "/{$resource}";
-//         })->andReturn($response);
-
-//     return new Client($transporter);
-// }
-
-function mockClient(string $method, string $resource, array $params, Response|ResponseInterface|string $response, $methodName = 'request', bool $validateParams = true)
+function mockClient(string $method, string $resource, array $params, array $response, $methodName = 'request', bool $validateParams = true)
 {
     $transporter = Mockery::mock(TransporterContract::class);
 
@@ -88,8 +45,8 @@ function mockClient(string $method, string $resource, array $params, Response|Re
                 }
             }
 
-            return $request->getMethod() === $method;
-            // && $request->getUri()->getPath() === "/v1/$resource";
+            return $request->getMethod() === $method
+            && $request->getUri()->getPath() === "/api/v2/$resource";
         })->andReturn($response);
 
     return new Client($transporter);

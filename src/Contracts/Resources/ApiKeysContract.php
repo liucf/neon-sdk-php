@@ -2,9 +2,6 @@
 
 namespace Neon\Contracts\Resources;
 
-use Neon\Responses\ApiKeys\CreateResponse;
-use Neon\Responses\ApiKeys\ListResponse;
-
 interface ApiKeysContract
 {
     /**
@@ -14,12 +11,12 @@ interface ApiKeysContract
      *
      * @param  array<string, mixed>  $parameters
      */
-    public function create(array $parameters): CreateResponse;
+    public function create(array $parameters): array;
 
-    /** 
+    /**
      * List all API keys.
      *
      * @see https://api-docs.neon.tech/reference/listapikeys
      */
-    public function list(): ListResponse;
+    public function list(): array;
 }

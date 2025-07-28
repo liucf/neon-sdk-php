@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Neon\Resources;
 
 use Neon\Contracts\Resources\ApiKeysContract;
-use Neon\Responses\ApiKeys\CreateResponse;
-use Neon\Responses\ApiKeys\ListResponse;
 use Neon\ValueObjects\Transporter\Payload;
 
 final class ApiKeys implements ApiKeysContract
@@ -20,11 +18,11 @@ final class ApiKeys implements ApiKeysContract
      *
      * @param  array<string, mixed>  $parameters
      */
-    public function create(array $parameters): CreateResponse
+    public function create(array $parameters): array
     {
         $payload = Payload::create('api_keys', $parameters);
-        $response = $this->transporter->request($payload);
-        return CreateResponse::from($response->data());
+
+        return $this->transporter->request($payload);
     }
 
     /**
@@ -32,10 +30,22 @@ final class ApiKeys implements ApiKeysContract
      *
      * @see https://api-docs.neon.tech/reference/listapikeys
      */
-    public function list(): ListResponse
+    public function list(): array
     {
         $payload = Payload::list('api_keys');
-        $response = $this->transporter->request($payload);
-        return ListResponse::from($response->data());
+
+        return $this->transporter->request($payload);
+    }
+
+    /**
+     * Revoke API key
+     *
+     * @see https://api-docs.neon.tech/reference/revokeapikey
+     */
+    public function revoke(string $id): array
+    {
+        $payload = Payload::delete('api_keys', $id);
+
+        return $this->transporter->request($payload);
     }
 }

@@ -41,7 +41,7 @@ final class HttpTransporter implements TransporterContract
     /**
      * {@inheritDoc}
      */
-    public function request(Payload $payload): Response
+    public function request(Payload $payload): array
     {
         $request = $payload->toRequest($this->baseUri, $this->headers, $this->queryParams);
 
@@ -52,13 +52,10 @@ final class HttpTransporter implements TransporterContract
         $this->throwIfJsonError($response, $contents);
 
         try {
-            /** @var array{error?: array{message: string, type: string, code: string}} $data */
-            $data = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
+            return json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $jsonException) {
             throw new UnserializableResponse($jsonException);
         }
-
-        return Response::from($data, $response->getHeaders());
     }
 
     private function sendRequest(Closure $callable): ResponseInterface
@@ -94,8 +91,8 @@ final class HttpTransporter implements TransporterContract
             /** @var array{error?: array{message: string|array<int, string>, type: string, code: string}} $response */
             $response = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
 
-            if (isset($response['error'])) {
-                throw new ErrorException($response['error'], $statusCode);
+            if ($statusCode !== 200) {
+                throw new ErrorException($response, $statusCode);
             }
         } catch (JsonException $jsonException) {
             throw new UnserializableResponse($jsonException);
