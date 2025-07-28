@@ -1,0 +1,10 @@
+{
+    "name": "liucf/neon-php-example",
+    "description": "Neon PHP example",
+    "type": "project",
+    "require": {
+        "liucf/neon-sdk-php": "*"
+    },
+    "license": "MIT",
+    "minimum-stability": "stable"
+}
