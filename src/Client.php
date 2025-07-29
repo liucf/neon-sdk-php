@@ -7,6 +7,7 @@ namespace Neon;
 use Neon\Contracts\ClientContract;
 use Neon\Contracts\TransporterContract;
 use Neon\Resources\ApiKeys;
+use Neon\Resources\Operations;
 use Neon\Resources\Regions;
 
 final class Client implements ClientContract
@@ -24,6 +25,14 @@ final class Client implements ClientContract
     public function apiKeys(): ApiKeys
     {
         return new ApiKeys($this->transporter);
+    }
+
+    /**
+     * Returns the operations resource.
+     */
+    public function operations(): Operations
+    {
+        return new Operations($this->transporter);
     }
 
     /**

@@ -3,7 +3,7 @@
 function apiKeyResource(): array
 {
     return [
-        'id' => 2180775,
+        'id' => 123456,
         'name' => 'Test API Key',
         'created_at' => '2025-07-25T00:16:39Z',
         'created_by' => createdByResource(),
@@ -15,7 +15,7 @@ function apiKeyResource(): array
 function apiKeyRevokeResource(): array
 {
     return [
-        'id' => 2180775,
+        'id' => 123456,
         'name' => 'Test API Key',
         'created_at' => '2025-07-25T00:16:39Z',
         'created_by' => '9d0e0c69-6f45-487f-881e-f5f56023bd4d',

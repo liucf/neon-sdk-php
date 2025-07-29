@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Neon\ValueObjects\Transporter;
 
 use GuzzleHttp\Psr7\Request;
+use Neon;
 use Neon\Enums\Transporter\ContentType;
 use Neon\Enums\Transporter\Method;
 use Neon\ValueObjects\ResourceUri;
 use Psr\Http\Message\RequestInterface;
-use Neon;
 
 /**
  * @internal
@@ -140,14 +140,22 @@ final class Payload
     /**
      * Creates a new Psr 7 Request instance.
      */
-    public function toRequest(BaseUri $baseUri, Headers $headers): RequestInterface
+    public function toRequest(BaseUri $baseUri, Headers $headers, QueryParams $queryParams): RequestInterface
     {
         $body = null;
 
         $uri = $baseUri->toString() . $this->uri->toString();
 
-        $headers = $headers->withUserAgent('neon-php', Neon::VERSION)
-            ->withContentType($this->contentType);
+        $queryParams = $queryParams->toArray();
+        if ($this->method === Method::GET) {
+            $queryParams = [...$queryParams, ...$this->parameters];
+        }
+
+        if ($queryParams !== []) {
+            $uri .= '?' . http_build_query($queryParams);
+        }
+
+        $headers = $headers->withUserAgent('neon-php', Neon::VERSION)->withContentType($this->contentType);
 
         if ($this->idempotencyKey) {
             $headers = $headers->withIdempotencyKey($this->idempotencyKey);

@@ -15,7 +15,7 @@ describe('ApiKeys', function () {
             ->toBeArray()
             ->toHaveCount(2)
             ->and($result[0]['id'])
-            ->toBe(2180775)
+            ->toBe(123456)
             ->and($result[0]['created_by']['name'])
             ->toBe('John Doe');
     });
@@ -37,7 +37,7 @@ describe('ApiKeys', function () {
         expect($result)
             ->toBeArray()
             ->and($result['id'])
-            ->toBe(2180775)
+            ->toBe(123456)
             ->and($result['created_by']['name'])
             ->toBe('John Doe');
     });
@@ -45,17 +45,17 @@ describe('ApiKeys', function () {
     test('revoke', function () {
         $client = mockClient(
             'DELETE',
-            'api_keys/2180775',
+            'api_keys/123456',
             [],
             apiKeyRevokeResource()
         );
 
-        $result = $client->apiKeys()->revoke('2180775');
+        $result = $client->apiKeys()->revoke('123456');
 
         expect($result)
             ->toBeArray()
             ->and($result['id'])
-            ->toBe(2180775)
+            ->toBe(123456)
             ->and($result['revoked'])
             ->toBeTrue();
     });
