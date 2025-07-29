@@ -7,6 +7,7 @@
 - [Get Started](#get-started)
 - [Usage](#usage)
   - [ApiKeys Resource](#apikes-resource)
+  - [Regions Resource](#regions-resource)
 
 
 
@@ -20,29 +21,35 @@ First, install via the [Composer](https://getcomposer.org/) package manager:
 composer require liucf/neon-sdk-php
 ```
 
-Then, interact with Neon's API:
-
+Then, interact with Neon's API by creating a client instance with your API key:
+```php
+$neon = Neon::client('napi_123456789');
+```
 ## Usage
 
 ### `ApiKeys` Resource
 
 #### `list`
 ```php
-$neon = Neon::client('napi_123456789');
-
-$neon->ApiKeys()->list();
+$neon->apiKeys()->list();
 ```
 
 #### `create`
 ```php
-$neon = Neon::client('napi_123456789');
-$neon->ApiKeys()->create(['key_name' => 'Test API Key from SDK']);
+$neon->apiKeys()->create(['key_name' => 'Test API Key from SDK']);
 ```
 
 #### `revoke`
 ```php
-$neon = Neon::client('napi_123456789');
-$neon->ApiKeys()->revoke('2188549');
+$neon->apiKeys()->revoke('2188549');
+```
+
+
+### `Regions` Resource
+
+#### `list`
+```php
+$neon->regions()->list();
 ```
 
 > **Note**

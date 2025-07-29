@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Neon\Resources;
 
-use Neon\Contracts\Resources\ApiKeysContract;
 use Neon\ValueObjects\Transporter\Payload;
 
-final class ApiKeys implements ApiKeysContract
+final class ApiKeys
 {
     use Concerns\Transportable;
 

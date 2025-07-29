@@ -9,7 +9,7 @@ describe('ApiKeys', function () {
             apiKeyListResource()
         );
 
-        $result = $client->ApiKeys()->list();
+        $result = $client->apiKeys()->list();
 
         expect($result)
             ->toBeArray()
@@ -30,7 +30,7 @@ describe('ApiKeys', function () {
             apiKeyResource()
         );
 
-        $result = $client->ApiKeys()->create([
+        $result = $client->apiKeys()->create([
             'name' => 'Test API Key',
         ]);
 
@@ -50,7 +50,7 @@ describe('ApiKeys', function () {
             apiKeyRevokeResource()
         );
 
-        $result = $client->ApiKeys()->revoke('2180775');
+        $result = $client->apiKeys()->revoke('2180775');
 
         expect($result)
             ->toBeArray()
