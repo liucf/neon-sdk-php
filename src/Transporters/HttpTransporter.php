@@ -19,7 +19,6 @@ use Neon\ValueObjects\Transporter\QueryParams;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Neon\ValueObjects\Transporter\Response;
 
 /**
  * @internal
@@ -38,14 +37,11 @@ final class HttpTransporter implements TransporterContract
         // ..
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function request(Payload $payload): array
     {
         $request = $payload->toRequest($this->baseUri, $this->headers, $this->queryParams);
 
-        $response = $this->sendRequest(fn(): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
+        $response = $this->sendRequest(fn (): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
 
         $contents = (string) $response->getBody();
 
@@ -88,10 +84,9 @@ final class HttpTransporter implements TransporterContract
         }
 
         try {
-            /** @var array{error?: array{message: string|array<int, string>, type: string, code: string}} $response */
             $response = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
 
-            if ($statusCode !== 200) {
+            if (isset($response['message'])) {
                 throw new ErrorException($response, $statusCode);
             }
         } catch (JsonException $jsonException) {

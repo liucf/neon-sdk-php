@@ -13,9 +13,12 @@ final class Operations
     /**
      * List all operations.
      *
+     * @param  array<string, mixed>  $parameters
+     * @return array<string, mixed>
+     *
      * @see https://api-docs.neon.tech/reference/listprojectoperations
      */
-    public function list(string $projectId, $parameters = []): array
+    public function list(string $projectId, array $parameters = []): array
     {
         $payload = Payload::list("projects/{$projectId}/operations", $parameters);
 

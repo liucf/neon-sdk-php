@@ -115,7 +115,7 @@ final class Factory
             $queryParams = $queryParams->withParam($name, $value);
         }
 
-        $client = $this->httpClient ??= new GuzzleClient();
+        $client = $this->httpClient ??= new GuzzleClient;
 
         $transporter = new HttpTransporter($client, $baseUri, $headers, $queryParams);
 

@@ -13,6 +13,9 @@ final class Regions
     /**
      * List all regions.
      *
+     *
+     * @return array<string, mixed>
+     *
      * @see https://api-docs.neon.tech/reference/getactiveregions
      */
     public function list(): array

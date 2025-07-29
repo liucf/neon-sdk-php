@@ -16,6 +16,7 @@ final class ApiKeys
      * @see https://api-docs.neon.tech/reference/createapikey
      *
      * @param  array<string, mixed>  $parameters
+     * @return array<string, mixed>
      */
     public function create(array $parameters): array
     {
@@ -26,6 +27,8 @@ final class ApiKeys
 
     /**
      * List all API keys.
+     *
+     * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/listapikeys
      */
@@ -38,6 +41,8 @@ final class ApiKeys
 
     /**
      * Revoke API key
+     *
+     * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/revokeapikey
      */

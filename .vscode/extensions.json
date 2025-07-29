@@ -1,5 +1,5 @@
 {
     "recommendations": [
-        "junstyle.php-cs-fixer"
+        "open-southeners.laravel-pint"
     ]
 }

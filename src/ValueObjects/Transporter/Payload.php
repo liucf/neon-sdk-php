@@ -144,7 +144,7 @@ final class Payload
     {
         $body = null;
 
-        $uri = $baseUri->toString() . $this->uri->toString();
+        $uri = $baseUri->toString().$this->uri->toString();
 
         $queryParams = $queryParams->toArray();
         if ($this->method === Method::GET) {
@@ -152,7 +152,7 @@ final class Payload
         }
 
         if ($queryParams !== []) {
-            $uri .= '?' . http_build_query($queryParams);
+            $uri .= '?'.http_build_query($queryParams);
         }
 
         $headers = $headers->withUserAgent('neon-php', Neon::VERSION)->withContentType($this->contentType);
@@ -162,10 +162,7 @@ final class Payload
         }
 
         if ($this->method === Method::POST || $this->method === Method::PATCH || $this->method === Method::PUT) {
-            $body = json_encode(
-                $this->parameters === [] || ! array_is_list($this->parameters) ? (object) $this->parameters : $this->parameters,
-                JSON_THROW_ON_ERROR
-            );
+            $body = json_encode($this->parameters, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
         }
 
         return new Request($this->method->value, $uri, $headers->toArray(), $body);

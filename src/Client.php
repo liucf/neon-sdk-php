@@ -15,9 +15,7 @@ final class Client implements ClientContract
     /**
      * Creates a Client instance with the given API token.
      */
-    public function __construct(private readonly TransporterContract $transporter)
-    {
-    }
+    public function __construct(private readonly TransporterContract $transporter) {}
 
     /**
      * Returns the API keys resource.
