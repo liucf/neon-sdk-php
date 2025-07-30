@@ -13,7 +13,7 @@ final class Projects
     /**
      * List all projects.
      *
-     *
+     * @param  array<string, mixed>  $parameters
      * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/listprojects
@@ -28,6 +28,7 @@ final class Projects
     /**
      * Create a project.
      *
+     * @param  array<string, mixed>  $data
      * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/createproject
@@ -42,6 +43,7 @@ final class Projects
     /**
      * List shared projects
      *
+     * @param  array<string, mixed>  $parameters
      * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/listsharedprojects
@@ -70,6 +72,7 @@ final class Projects
     /**
      * Update project details.
      *
+     * @param  array<string, mixed>  $data
      * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/updateproject
