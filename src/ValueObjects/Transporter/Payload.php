@@ -138,6 +138,34 @@ final class Payload
     }
 
     /**
+     * Creates a new Payload value object for DELETE with parameters.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public static function deleteWithBody(string $resource, array $parameters = []): self
+    {
+        $contentType = ContentType::JSON;
+        $method = Method::DELETE;
+        $uri = ResourceUri::create($resource);
+
+        return new self($contentType, $method, $uri, $parameters);
+    }
+
+    /**
+     * Creates a new Payload value object from the given parameters.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    public static function put(string $resource, string $id, array $parameters = []): self
+    {
+        $contentType = ContentType::JSON;
+        $method = Method::PUT;
+        $uri = ResourceUri::modify($resource, $id);
+
+        return new self($contentType, $method, $uri, $parameters);
+    }
+
+    /**
      * Creates a new Psr 7 Request instance.
      */
     public function toRequest(BaseUri $baseUri, Headers $headers, QueryParams $queryParams): RequestInterface
@@ -161,7 +189,7 @@ final class Payload
             $headers = $headers->withIdempotencyKey($this->idempotencyKey);
         }
 
-        if ($this->method === Method::POST || $this->method === Method::PATCH || $this->method === Method::PUT) {
+        if ($this->method === Method::POST || $this->method === Method::PATCH || $this->method === Method::PUT || $this->method === Method::DELETE) {
             $body = json_encode($this->parameters, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
         }
 
