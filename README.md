@@ -59,6 +59,11 @@ $neon->operations()->list('royal-hall-84927440', [
 ]);
 ```
 
+#### `retrieve`
+```php
+$neon->operations()->retrieve('royal-hall-84927440', '33d65f33-eabe-4f46-b945-123456789abc');
+```
+
 
 ### `Regions` Resource
 

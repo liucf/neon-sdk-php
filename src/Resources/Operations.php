@@ -24,4 +24,18 @@ final class Operations
 
         return $this->transporter->request($payload);
     }
+
+    /**
+     * Retrieve an operation.
+     *
+     * @return array<string, mixed>
+     *
+     * @see https://api-docs.neon.tech/reference/getprojectoperation
+     */
+    public function retrieve(string $projectId, string $operationId): array
+    {
+        $payload = Payload::retrieve("projects/{$projectId}/operations", $operationId);
+
+        return $this->transporter->request($payload);
+    }
 }

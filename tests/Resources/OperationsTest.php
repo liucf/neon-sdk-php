@@ -46,4 +46,28 @@ describe('Operations', function () {
             ->toBeArray()
             ->toHaveCount(2);
     });
+
+    test('retrieve', function () {
+        $client = mockClient(
+            'GET',
+            'projects/royal-hall-11111111/operations/33d65f33-eabe-4f46-b945-aa2bb7772xxx',
+            [],
+            operationResource()
+        );
+
+        $result = $client->operations()->retrieve('royal-hall-11111111', '33d65f33-eabe-4f46-b945-aa2bb7772xxx');
+
+        expect($result)
+            ->toBeArray()
+            ->and($result['id'])
+            ->toBe('33d65f33-eabe-4f46-b945-aa2bb7772xxx')
+            ->and($result['project_id'])
+            ->toBe('royal-hall-11111111')
+            ->and($result['action'])
+            ->toBe('check_availability')
+            ->and($result['status'])
+            ->toBe('finished')
+            ->and($result['failures_count'])
+            ->toBe(0);
+    });
 });
