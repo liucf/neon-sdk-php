@@ -64,6 +64,28 @@ $neon->operations()->list('royal-hall-84927440', [
 $neon->operations()->retrieve('royal-hall-84927440', '33d65f33-eabe-4f46-b945-123456789abc');
 ```
 
+### `Projects` Resource
+#### `list`
+```php
+$neon->projects()->list(['project' => ['org_id' => 'org_123456789']]);
+```
+#### `create`
+```php
+$neon->projects()->create(['project' => ['name' => 'test_project']);
+```
+#### 'listShared'
+```php
+$neon->projects()->listShared();
+```
+#### `retrieve`
+```php
+$neon->projects()->retrieve('project_123456789');
+```
+#### `update`
+```php
+$neon->projects()->update('project_123456789', ['project' => ['name' => 'updated_project_name']]);
+```
+
 
 ### `Regions` Resource
 

@@ -8,6 +8,7 @@ use Neon\Contracts\ClientContract;
 use Neon\Contracts\TransporterContract;
 use Neon\Resources\ApiKeys;
 use Neon\Resources\Operations;
+use Neon\Resources\Projects;
 use Neon\Resources\Regions;
 
 final class Client implements ClientContract
@@ -39,5 +40,13 @@ final class Client implements ClientContract
     public function regions(): Regions
     {
         return new Regions($this->transporter);
+    }
+
+    /**
+     * Returns the projects resource.
+     */
+    public function projects(): Projects
+    {
+        return new Projects($this->transporter);
     }
 }
