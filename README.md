@@ -1,8 +1,5 @@
 # Neon PHP SDK
 
-## Examples
-- [PHP](example/README.md)
-
 ## Table of Contents
 - [Get Started](#get-started)
 - [Usage](#usage)
@@ -17,8 +14,6 @@
   - [Organizations Resource](#organizations-resource)
   - [Auth Resource](#auth-resource)
   - [DataAPI Resource](#dataapi-resource)
-
-
 
 ## Getting started
 
