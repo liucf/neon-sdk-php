@@ -46,7 +46,7 @@ final class ApiKeys
      *
      * @see https://api-docs.neon.tech/reference/revokeapikey
      */
-    public function revoke(string $id): array
+    public function revoke(int $id): array
     {
         $payload = Payload::delete('api_keys', $id);
 

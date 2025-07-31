@@ -128,7 +128,7 @@ final class Payload
     /**
      * Creates a new Payload value object from the given parameters.
      */
-    public static function delete(string $resource, string $id): self
+    public static function delete(string $resource, string|int $id): self
     {
         $contentType = ContentType::JSON;
         $method = Method::DELETE;

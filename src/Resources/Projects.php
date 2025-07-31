@@ -163,7 +163,7 @@ final class Projects
      *
      * @see https://api-docs.neon.tech/reference/createprojecttransferrequest
      */
-    public function createTransferRequest(string $projectId, array $data): array
+    public function createTransferRequest(string $projectId, array $data = []): array
     {
         $payload = Payload::create("projects/{$projectId}/transfer_requests", $data);
 
