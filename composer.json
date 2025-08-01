@@ -1,6 +1,5 @@
 {
     "name": "liucf/neon-sdk-php",
-    "version": "1.0.0",
     "description": "Neon PHP library",
     "keywords": ["php", "neon", "sdk", "api", "client"],
     "homepage": "https://neon.com/",
