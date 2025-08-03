@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Neon\ValueObjects\Transporter;
 
 use GuzzleHttp\Psr7\Request;
-use Neon;
 use Neon\Enums\Transporter\ContentType;
 use Neon\Enums\Transporter\Method;
 use Neon\ValueObjects\ResourceUri;
@@ -183,7 +182,7 @@ final class Payload
             $uri .= '?'.http_build_query($queryParams);
         }
 
-        $headers = $headers->withUserAgent('neon-php', Neon::VERSION)->withContentType($this->contentType);
+        $headers = $headers->withContentType($this->contentType);
 
         if ($this->idempotencyKey) {
             $headers = $headers->withIdempotencyKey($this->idempotencyKey);

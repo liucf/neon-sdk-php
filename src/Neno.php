@@ -8,18 +8,12 @@ use Neon\Factory;
 final class Neon
 {
     /**
-     * The current SDK version.
-     */
-    public const VERSION = '0.1.0';
-
-    /**
      * Creates a new Neon Client with the given API token.
      */
     public static function client(string $apiKey): Client
     {
         return self::factory()
             ->withApiKey($apiKey)
-            ->withBaseUri(getenv('NEON_BASE_URL') ?: 'console.neon.tech/api/v2')
             ->make();
     }
 
