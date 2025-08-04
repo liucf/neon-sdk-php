@@ -1,36 +1,37 @@
 <?php
 
+use Neon\Responses\Users\AuthDetailsResponse;
+use Neon\Responses\Users\BillingAccountResponse;
+use Neon\Responses\Users\MeResponse;
+use Neon\Responses\Users\OrganizationResponse;
+use Neon\Responses\Users\OrganizationsResponse;
+use Neon\Responses\Users\ProjectResponse;
+use Neon\Responses\Users\TransferProjectsResponse;
+use Neon\ValueObjects\Transporter\Response;
+
 describe('Users', function () {
     test('me', function () {
         $client = mockClient(
             'GET',
             'users/me',
             [],
-            userResource()
+            Response::from(userResource())
         );
 
         $result = $client->users()->me();
 
         expect($result)
-            ->toBeArray()
-            ->and($result['id'])
-            ->toBe('user-123456')
-            ->and($result['email'])
-            ->toBe('user@example.com')
-            ->and($result['name'])
-            ->toBe('John Doe')
-            ->and($result['login'])
-            ->toBe('johndoe')
-            ->and($result['plan'])
-            ->toBe('pro')
-            ->and($result['projects_limit'])
-            ->toBe(10)
-            ->and($result['branches_limit'])
-            ->toBe(100)
-            ->and($result['billing_account']['id'])
-            ->toBe('billing-123456')
-            ->and($result['billing_account']['plan'])
-            ->toBe('pro');
+            ->toBeInstanceOf(MeResponse::class)
+            ->id->toBe('user-123456')
+            ->email->toBe('user@example.com')
+            ->name->toBe('John Doe')
+            ->login->toBe('johndoe')
+            ->plan->toBe('pro')
+            ->projectsLimit->toBe(10)
+            ->branchesLimit->toBe(100)
+            ->billingAccount->toBeInstanceOf(BillingAccountResponse::class)
+            ->billingAccount->id->toBe('billing-123456')
+            ->billingAccount->plan->toBe('pro');
     });
 
     test('organizations', function () {
@@ -38,27 +39,15 @@ describe('Users', function () {
             'GET',
             'users/me/organizations',
             [],
-            userOrganizationsResource()
+            Response::from(userOrganizationsResource())
         );
 
         $result = $client->users()->organizations();
 
         expect($result)
-            ->toBeArray()
-            ->organizations
-            ->toHaveCount(2)
-            ->and($result['organizations'][0]['id'])
-            ->toBe('org-123456')
-            ->and($result['organizations'][0]['name'])
-            ->toBe('My Company')
-            ->and($result['organizations'][0]['slug'])
-            ->toBe('my-company')
-            ->and($result['organizations'][1]['id'])
-            ->toBe('org-789012')
-            ->and($result['organizations'][1]['name'])
-            ->toBe('My Startup')
-            ->and($result['organizations'][1]['slug'])
-            ->toBe('my-startup');
+            ->toBeInstanceOf(OrganizationsResponse::class)
+            ->organizations->toHaveCount(2)
+            ->organizations->each->toBeInstanceOf(OrganizationResponse::class);
     });
 
     test('transferProjects', function () {
@@ -69,7 +58,7 @@ describe('Users', function () {
                 'project_ids' => ['royal-hall-11111111'],
                 'org_id' => 'org-123456',
             ],
-            userTransferProjectsResource()
+            Response::from(userTransferProjectsResource())
         );
 
         $result = $client->users()->transferProjects([
@@ -78,15 +67,9 @@ describe('Users', function () {
         ]);
 
         expect($result)
-            ->toBeArray()
-            ->projects
-            ->toHaveCount(1)
-            ->and($result['projects'][0]['id'])
-            ->toBe('royal-hall-11111111')
-            ->and($result['projects'][0]['name'])
-            ->toBe('transferred-project-1')
-            ->and($result['projects'][0]['org_id'])
-            ->toBe('org-123456');
+            ->toBeInstanceOf(TransferProjectsResponse::class)
+            ->projects->toHaveCount(1)
+            ->projects->each->toBeInstanceOf(ProjectResponse::class);
     });
 
     test('authDetails', function () {
@@ -94,24 +77,18 @@ describe('Users', function () {
             'GET',
             'auth',
             [],
-            userAuthDetailsResource()
+            Response::from(userAuthDetailsResource())
         );
 
         $result = $client->users()->authDetails();
 
         expect($result)
-            ->toBeArray()
-            ->and($result['type'])
-            ->toBe('api_key')
-            ->and($result['user_id'])
-            ->toBe('user-123456')
-            ->and($result['api_key_id'])
-            ->toBe('ak-123456789')
-            ->and($result['scopes'])
-            ->toHaveCount(2)
-            ->and($result['scopes'])
-            ->toContain('read', 'write')
-            ->and($result['last_used_from_addr'])
-            ->toBe('192.168.1.100');
+            ->toBeInstanceOf(AuthDetailsResponse::class)
+            ->type->toBe('api_key')
+            ->userId->toBe('user-123456')
+            ->apiKeyId->toBe('ak-123456789')
+            ->scopes->toHaveCount(2)
+            ->scopes->toContain('read', 'write')
+            ->lastUsedFromAddr->toBe('192.168.1.100');
     });
 });

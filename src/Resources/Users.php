@@ -4,67 +4,71 @@ declare(strict_types=1);
 
 namespace Neon\Resources;
 
-use Neon\Contracts\TransporterContract;
+use Neon\Responses\Users\AuthDetailsResponse;
+use Neon\Responses\Users\MeResponse;
+use Neon\Responses\Users\OrganizationsResponse;
+use Neon\Responses\Users\TransferProjectsResponse;
 use Neon\ValueObjects\Transporter\Payload;
 
 final class Users
 {
-    public function __construct(private readonly TransporterContract $transporter) {}
+    use Concerns\Transportable;
 
     /**
      * Retrieves information about the current Neon user account.
      *
-     * @return array<string, mixed>
-     *
      * @see https://api-docs.neon.tech/reference/getcurrentuserinfo
      */
-    public function me(): array
+    public function me(): MeResponse
     {
         $payload = Payload::list('users/me');
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return MeResponse::from($response->data());
     }
 
     /**
      * Retrieves information about the current Neon user's organizations.
      *
-     * @return array<string, mixed>
-     *
      * @see https://api-docs.neon.tech/reference/getcurrentuserorganizations
      */
-    public function organizations(): array
+    public function organizations(): OrganizationsResponse
     {
         $payload = Payload::list('users/me/organizations');
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return OrganizationsResponse::from($response->data());
     }
 
     /**
      * Transfers selected projects from your personal account to a specified organization.
      *
      * @param  array<string, mixed>  $data
-     * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/transferprojectsfromusertoorg
      */
-    public function transferProjects(array $data): array
+    public function transferProjects(array $data): TransferProjectsResponse
     {
         $payload = Payload::create('users/me/projects/transfer', $data);
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return TransferProjectsResponse::from($response->data());
     }
 
     /**
      * Returns auth information about the passed credentials.
      *
-     * @return array<string, mixed>
-     *
      * @see https://api-docs.neon.tech/reference/getauthdetails
      */
-    public function authDetails(): array
+    public function authDetails(): AuthDetailsResponse
     {
         $payload = Payload::list('auth');
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return AuthDetailsResponse::from($response->data());
     }
 }
