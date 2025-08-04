@@ -1,22 +1,23 @@
 <?php
 
+use Neon\Responses\Regions\ListResponse;
+use Neon\Responses\Regions\RetrieveResponse;
+use Neon\ValueObjects\Transporter\Response;
+
 describe('Regions', function () {
     test('list', function () {
         $client = mockClient(
             'GET',
             'regions',
             [],
-            regionListResource()
+            Response::from(regionListResource())
         );
 
         $result = $client->regions()->list();
 
         expect($result)
-            ->toBeArray()
-            ->toHaveCount(2)
-            ->and($result[0]['region_id'])
-            ->toBe('aws-us-east-2')
-            ->and($result[0]['name'])
-            ->toBe('AWS US East 2 (Ohio)');
+            ->toBeInstanceOf(ListResponse::class)
+            ->data->toBeArray()->toHaveCount(2)
+            ->data->each->toBeInstanceOf(RetrieveResponse::class);
     });
 });

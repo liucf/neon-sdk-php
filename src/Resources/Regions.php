@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Neon\Resources;
 
+use Neon\Responses\Regions\ListResponse;
 use Neon\ValueObjects\Transporter\Payload;
 
 final class Regions
@@ -13,15 +14,14 @@ final class Regions
     /**
      * List all regions.
      *
-     *
-     * @return array<string, mixed>
-     *
      * @see https://api-docs.neon.tech/reference/getactiveregions
      */
-    public function list(): array
+    public function list(): ListResponse
     {
         $payload = Payload::list('regions');
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return ListResponse::from($response->data());
     }
 }
