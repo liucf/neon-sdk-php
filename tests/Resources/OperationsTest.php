@@ -1,29 +1,24 @@
 <?php
 
+use Neon\Responses\Operations\ListResponse;
+use Neon\Responses\Operations\RetrieveResponse;
+use Neon\ValueObjects\Transporter\Response;
+
 describe('Operations', function () {
     test('list', function () {
         $client = mockClient(
             'GET',
             'projects/royal-hall-11111111/operations',
             [],
-            operationListResource()
+            Response::from(operationListResource())
         );
 
         $result = $client->operations()->list('royal-hall-11111111');
 
         expect($result)
-            ->toBeArray()
-            ->toHaveCount(2)
-            ->and($result['operations'][0]['id'])
-            ->toBe('33d65f33-eabe-4f46-b945-aa2bb7772xxx')
-            ->and($result['operations'][0]['project_id'])
-            ->toBe('royal-hall-11111111')
-            ->and($result['operations'][0]['action'])
-            ->toBe('check_availability')
-            ->and($result['operations'][0]['status'])
-            ->toBe('finished')
-            ->and($result['operations'][0]['failures_count'])
-            ->toBe(0);
+            ->toBeInstanceOf(ListResponse::class)
+            ->data->toBeArray()->toHaveCount(2)
+            ->data->each->toBeInstanceOf(RetrieveResponse::class);
     });
 
     test('list with parameters', function () {
@@ -34,7 +29,7 @@ describe('Operations', function () {
                 'limit' => 2,
                 'cursor' => '2025-07-27T01:45:32.898729Z',
             ],
-            operationListResource()
+            Response::from(operationListResource())
         );
 
         $result = $client->operations()->list('royal-hall-11111111', [
@@ -43,8 +38,8 @@ describe('Operations', function () {
         ]);
 
         expect($result)
-            ->toBeArray()
-            ->toHaveCount(2);
+            ->toBeInstanceOf(ListResponse::class)
+            ->data->toBeArray()->toHaveCount(2);
     });
 
     test('retrieve', function () {
@@ -52,22 +47,17 @@ describe('Operations', function () {
             'GET',
             'projects/royal-hall-11111111/operations/33d65f33-eabe-4f46-b945-aa2bb7772xxx',
             [],
-            operationResource()
+            Response::from(operationResource())
         );
 
         $result = $client->operations()->retrieve('royal-hall-11111111', '33d65f33-eabe-4f46-b945-aa2bb7772xxx');
 
         expect($result)
-            ->toBeArray()
-            ->and($result['id'])
-            ->toBe('33d65f33-eabe-4f46-b945-aa2bb7772xxx')
-            ->and($result['project_id'])
-            ->toBe('royal-hall-11111111')
-            ->and($result['action'])
-            ->toBe('check_availability')
-            ->and($result['status'])
-            ->toBe('finished')
-            ->and($result['failures_count'])
-            ->toBe(0);
+            ->toBeInstanceOf(RetrieveResponse::class)
+            ->id->toBe('33d65f33-eabe-4f46-b945-aa2bb7772xxx')
+            ->projectId->toBe('royal-hall-11111111')
+            ->action->toBe('check_availability')
+            ->status->toBe('finished')
+            ->failuresCount->toBe(0);
     });
 });
