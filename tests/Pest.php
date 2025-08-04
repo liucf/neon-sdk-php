@@ -18,8 +18,10 @@ use Neon\ValueObjects\Transporter\BaseUri;
 use Neon\ValueObjects\Transporter\Headers;
 use Neon\ValueObjects\Transporter\Payload;
 use Neon\ValueObjects\Transporter\QueryParams;
+use Neon\ValueObjects\Transporter\Response;
+use Psr\Http\Message\ResponseInterface;
 
-function mockClient(string $method, string $resource, array $params, array $response, $methodName = 'request', bool $validateParams = true)
+function mockClient(string $method, string $resource, array $params, Response|ResponseInterface|string $response, $methodName = 'request', bool $validateParams = true)
 {
     $transporter = Mockery::mock(TransporterContract::class);
 

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Neon\Resources;
 
+use Neon\Responses\ApiKeys\CreateResponse;
+use Neon\Responses\ApiKeys\ListResponse;
+use Neon\Responses\ApiKeys\RevokeResponse;
 use Neon\ValueObjects\Transporter\Payload;
 
 final class ApiKeys
@@ -16,40 +19,43 @@ final class ApiKeys
      * @see https://api-docs.neon.tech/reference/createapikey
      *
      * @param  array<string, mixed>  $parameters
-     * @return array<string, mixed>
      */
-    public function create(array $parameters): array
+    public function create(array $parameters): CreateResponse
     {
         $payload = Payload::create('api_keys', $parameters);
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return CreateResponse::from($response->data());
     }
 
     /**
      * List all API keys.
      *
-     * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/listapikeys
      */
-    public function list(): array
+    public function list(): ListResponse
     {
         $payload = Payload::list('api_keys');
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return ListResponse::from($response->data());
     }
 
     /**
      * Revoke API key
      *
-     * @return array<string, mixed>
      *
      * @see https://api-docs.neon.tech/reference/revokeapikey
      */
-    public function revoke(int $id): array
+    public function revoke(int $id): RevokeResponse
     {
         $payload = Payload::delete('api_keys', $id);
 
-        return $this->transporter->request($payload);
+        $response = $this->transporter->request($payload);
+
+        return RevokeResponse::from($response->data());
     }
 }

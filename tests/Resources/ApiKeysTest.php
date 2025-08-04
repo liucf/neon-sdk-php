@@ -1,23 +1,26 @@
 <?php
 
+use Neon\Responses\ApiKeys\CreateResponse;
+use Neon\Responses\ApiKeys\ListResponse;
+use Neon\Responses\ApiKeys\RetrieveResponse;
+use Neon\Responses\ApiKeys\RevokeResponse;
+use Neon\ValueObjects\Transporter\Response;
+
 describe('ApiKeys', function () {
     test('list', function () {
         $client = mockClient(
             'GET',
             'api_keys',
             [],
-            apiKeyListResource()
+            Response::from(apiKeyListResource())
         );
 
         $result = $client->apiKeys()->list();
 
         expect($result)
-            ->toBeArray()
-            ->toHaveCount(2)
-            ->and($result[0]['id'])
-            ->toBe(123456)
-            ->and($result[0]['created_by']['name'])
-            ->toBe('John Doe');
+            ->toBeInstanceOf(ListResponse::class)
+            ->data->toBeArray()->toHaveCount(2)
+            ->data->each->toBeInstanceOf(RetrieveResponse::class);
     });
 
     test('create', function () {
@@ -27,19 +30,18 @@ describe('ApiKeys', function () {
             [
                 'name' => 'Test API Key',
             ],
-            apiKeyResource()
+            Response::from(apiKeyCreateResource())
         );
 
         $result = $client->apiKeys()->create([
             'name' => 'Test API Key',
         ]);
-
         expect($result)
-            ->toBeArray()
-            ->and($result['id'])
+            ->toBeInstanceOf(CreateResponse::class)
+            ->id
             ->toBe(123456)
-            ->and($result['created_by']['name'])
-            ->toBe('John Doe');
+            ->key
+            ->toBe('sk_test_1234567890abcdef');
     });
 
     test('revoke', function () {
@@ -47,16 +49,14 @@ describe('ApiKeys', function () {
             'DELETE',
             'api_keys/123456',
             [],
-            apiKeyRevokeResource()
+            Response::from(apiKeyRevokeResource())
         );
 
         $result = $client->apiKeys()->revoke('123456');
 
         expect($result)
-            ->toBeArray()
-            ->and($result['id'])
-            ->toBe(123456)
-            ->and($result['revoked'])
-            ->toBeTrue();
+            ->toBeInstanceOf(RevokeResponse::class)
+            ->id->toBe(123456)
+            ->revoked->toBeTrue();
     });
 });

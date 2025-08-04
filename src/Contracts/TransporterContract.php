@@ -8,6 +8,7 @@ use Neon\Exceptions\ErrorException;
 use Neon\Exceptions\TransporterException;
 use Neon\Exceptions\UnserializableResponse;
 use Neon\ValueObjects\Transporter\Payload;
+use Neon\ValueObjects\Transporter\Response;
 
 /**
  * @internal
@@ -17,9 +18,8 @@ interface TransporterContract
     /**
      * Sends a request to the Neon API.
      *
-     * @return array<string, mixed>
      *
      * @throws ErrorException|TransporterException|UnserializableResponse
      */
-    public function request(Payload $payload): array;
+    public function request(Payload $payload): Response;
 }

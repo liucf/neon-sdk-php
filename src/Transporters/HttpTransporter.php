@@ -16,6 +16,7 @@ use Neon\ValueObjects\Transporter\BaseUri;
 use Neon\ValueObjects\Transporter\Headers;
 use Neon\ValueObjects\Transporter\Payload;
 use Neon\ValueObjects\Transporter\QueryParams;
+use Neon\ValueObjects\Transporter\Response;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -37,7 +38,10 @@ final class HttpTransporter implements TransporterContract
         // ..
     }
 
-    public function request(Payload $payload): array
+    /**
+     * {@inheritDoc}
+     */
+    public function request(Payload $payload): Response
     {
         $request = $payload->toRequest($this->baseUri, $this->headers, $this->queryParams);
 
@@ -45,13 +49,19 @@ final class HttpTransporter implements TransporterContract
 
         $contents = (string) $response->getBody();
 
+        if (str_contains($response->getHeaderLine('Content-Type'), ContentType::TEXT_PLAIN->value)) {
+            return Response::from($contents);
+        }
+
         $this->throwIfJsonError($response, $contents);
 
         try {
-            return json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
+            $data = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $jsonException) {
             throw new UnserializableResponse($jsonException);
         }
+
+        return Response::from($data);
     }
 
     private function sendRequest(Closure $callable): ResponseInterface
