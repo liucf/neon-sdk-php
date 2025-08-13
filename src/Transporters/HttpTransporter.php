@@ -46,7 +46,7 @@ final class HttpTransporter implements TransporterContract
         $request = $payload->toRequest($this->baseUri, $this->headers, $this->queryParams);
 
         $response = $this->sendRequest(fn (): \Psr\Http\Message\ResponseInterface => $this->client->sendRequest($request));
-
+        
         $contents = (string) $response->getBody();
 
         if (str_contains($response->getHeaderLine('Content-Type'), ContentType::TEXT_PLAIN->value)) {
@@ -96,9 +96,7 @@ final class HttpTransporter implements TransporterContract
         try {
             $response = json_decode($contents, true, flags: JSON_THROW_ON_ERROR);
 
-            if (isset($response['message'])) {
-                throw new ErrorException($response, $statusCode);
-            }
+            throw new ErrorException($response, $statusCode);
         } catch (JsonException $jsonException) {
             throw new UnserializableResponse($jsonException);
         }

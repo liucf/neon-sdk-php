@@ -6,6 +6,7 @@ namespace Neon\Responses\Users;
 
 use Neon\Contracts\ResponseContract;
 use Neon\Responses\Concerns\ArrayAccessible;
+use Neon\Responses\Meta\AuthAccountResponse;
 use Neon\Testing\Responses\Concerns\Fakeable;
 
 final class MeResponse implements ResponseContract
@@ -14,50 +15,61 @@ final class MeResponse implements ResponseContract
     use Fakeable;
 
     private function __construct(
-        public readonly string $id,
+        public readonly int $activeSecondsLimit,
+        public readonly ?BillingAccountResponse $billingAccount,
+        public readonly array $authAccounts,
         public readonly string $email,
-        public readonly string $name,
-        public readonly ?string $image,
+        public readonly string $id,
+        public readonly string $image,
         public readonly string $login,
+        public readonly string $name,
+        public readonly string $lastName,
         public readonly int $projectsLimit,
         public readonly int $branchesLimit,
-        public readonly ?string $lastActivity,
-        public readonly string $createdAt,
+        public readonly float $maxAutoscalingLimit,
+        public readonly ?float $computeSecondsLimit,
         public readonly string $plan,
-        public readonly BillingAccountResponse $billingAccount,
     ) {}
 
     public static function from(array $attributes): self
     {
         return new self(
-            $attributes['id'],
+            $attributes['active_seconds_limit'],
+            isset($attributes['billing_account'])
+                ? BillingAccountResponse::from($attributes['billing_account'])
+                : null,
+            array_map(fn ($authAccount) => AuthAccountResponse::from($authAccount), $attributes['auth_accounts']),
             $attributes['email'],
-            $attributes['name'],
-            $attributes['image'] ?? null,
+            $attributes['id'],
+            $attributes['image'],
             $attributes['login'],
+            $attributes['name'],
+            $attributes['last_name'],
             $attributes['projects_limit'],
             $attributes['branches_limit'],
-            $attributes['last_activity'] ?? null,
-            $attributes['created_at'],
+            $attributes['max_autoscaling_limit'],
+            $attributes['compute_seconds_limit'] ?? null,
             $attributes['plan'],
-            BillingAccountResponse::from($attributes['billing_account']),
         );
     }
 
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
+            'active_seconds_limit' => $this->activeSecondsLimit,
+            'billing_account' => $this->billingAccount?->toArray(),
+            'auth_accounts' => array_map(fn ($authAccount) => $authAccount->toArray(), $this->authAccounts),
             'email' => $this->email,
-            'name' => $this->name,
+            'id' => $this->id,
             'image' => $this->image,
             'login' => $this->login,
+            'name' => $this->name,
+            'last_name' => $this->lastName,
             'projects_limit' => $this->projectsLimit,
             'branches_limit' => $this->branchesLimit,
-            'last_activity' => $this->lastActivity,
-            'created_at' => $this->createdAt,
+            'max_autoscaling_limit' => $this->maxAutoscalingLimit,
+            'compute_seconds_limit' => $this->computeSecondsLimit,
             'plan' => $this->plan,
-            'billing_account' => $this->billingAccount->toArray(),
         ];
     }
 }

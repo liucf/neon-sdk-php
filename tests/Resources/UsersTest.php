@@ -1,11 +1,9 @@
 <?php
 
 use Neon\Responses\Users\AuthDetailsResponse;
-use Neon\Responses\Users\BillingAccountResponse;
 use Neon\Responses\Users\MeResponse;
 use Neon\Responses\Users\OrganizationResponse;
 use Neon\Responses\Users\OrganizationsResponse;
-use Neon\Responses\Users\ProjectResponse;
 use Neon\Responses\Users\TransferProjectsResponse;
 use Neon\ValueObjects\Transporter\Response;
 
@@ -26,12 +24,10 @@ describe('Users', function () {
             ->email->toBe('user@example.com')
             ->name->toBe('John Doe')
             ->login->toBe('johndoe')
-            ->plan->toBe('pro')
+            ->plan->toBe('free_v2')
             ->projectsLimit->toBe(10)
             ->branchesLimit->toBe(100)
-            ->billingAccount->toBeInstanceOf(BillingAccountResponse::class)
-            ->billingAccount->id->toBe('billing-123456')
-            ->billingAccount->plan->toBe('pro');
+            ->billingAccount->toBeNull();
     });
 
     test('organizations', function () {
@@ -50,26 +46,23 @@ describe('Users', function () {
             ->organizations->each->toBeInstanceOf(OrganizationResponse::class);
     });
 
-    test('transferProjects', function () {
+    test('transferProjects successful', function () {
         $client = mockClient(
             'POST',
             'users/me/projects/transfer',
             [
                 'project_ids' => ['royal-hall-11111111'],
-                'org_id' => 'org-123456',
+                'destination_org_id' => 'org-123456',
             ],
-            Response::from(userTransferProjectsResource())
+            Response::from([])
         );
 
         $result = $client->users()->transferProjects([
             'project_ids' => ['royal-hall-11111111'],
-            'org_id' => 'org-123456',
+            'destination_org_id' => 'org-123456',
         ]);
-
         expect($result)
-            ->toBeInstanceOf(TransferProjectsResponse::class)
-            ->projects->toHaveCount(1)
-            ->projects->each->toBeInstanceOf(ProjectResponse::class);
+            ->toBeInstanceOf(TransferProjectsResponse::class);
     });
 
     test('authDetails', function () {
@@ -84,11 +77,8 @@ describe('Users', function () {
 
         expect($result)
             ->toBeInstanceOf(AuthDetailsResponse::class)
-            ->type->toBe('api_key')
-            ->userId->toBe('user-123456')
-            ->apiKeyId->toBe('ak-123456789')
-            ->scopes->toHaveCount(2)
-            ->scopes->toContain('read', 'write')
-            ->lastUsedFromAddr->toBe('192.168.1.100');
+            ->accountId->toBe('9d0e0c69-f8b2-4c1a-9d0e-0c69f8b24xxx')
+            ->authMethod->toBe('api_key_user')
+            ->authData->toBe('1234567890abcdef');   
     });
 });

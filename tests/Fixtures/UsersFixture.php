@@ -6,21 +6,47 @@
 function userResource(): array
 {
     return [
+        'active_seconds_limit' => 0,
+        'auth_accounts' => [
+            [
+                'provider' => 'google',
+                'email' => 'user@example.com',
+                'name' => 'John Doe',
+                'image' => 'https://example.com/avatar.jpg',
+                'login' => 'johndoe',
+            ],
+            [
+                'provider' => 'keycloak',
+                'email' => 'user@example.com',
+                'name' => 'John Doe',
+                'image' => 'https://example.com/avatar.jpg',
+                'login' => 'johndoe',
+            ],
+        ],
         'id' => 'user-123456',
         'email' => 'user@example.com',
         'name' => 'John Doe',
         'image' => 'https://example.com/avatar.jpg',
         'login' => 'johndoe',
+        'last_name' => 'Doe',
         'projects_limit' => 10,
         'branches_limit' => 100,
-        'last_activity' => '2025-07-27T01:45:32.898729Z',
-        'created_at' => '2025-01-15T10:30:00.000000Z',
-        'plan' => 'pro',
-        'billing_account' => [
-            'id' => 'billing-123456',
-            'name' => 'My Organization',
-            'plan' => 'pro',
-        ],
+        'max_autoscaling_limit' => 0,
+        'plan' => 'free_v2',
+    ];
+}
+
+function userOrganizationResource(): array
+{
+    return [
+        'id' => 'org-123456',
+        'name' => 'My Company',
+        'handle' => 'my-company',
+        'plan' => 'free',
+        'created_at' => '2025-01-10T10:00:00.000000Z',
+        'managed_by' => 'console',
+        'updated_at' => '2025-07-27T01:45:32.898729Z',
+        'allow_hipaa_projects' => true,
     ];
 }
 
@@ -31,20 +57,8 @@ function userOrganizationsResource(): array
 {
     return [
         'organizations' => [
-            [
-                'id' => 'org-123456',
-                'name' => 'My Company',
-                'slug' => 'my-company',
-                'created_at' => '2025-01-10T10:00:00.000000Z',
-                'updated_at' => '2025-07-27T01:45:32.898729Z',
-            ],
-            [
-                'id' => 'org-789012',
-                'name' => 'My Startup',
-                'slug' => 'my-startup',
-                'created_at' => '2025-02-15T14:30:00.000000Z',
-                'updated_at' => '2025-07-27T01:45:32.898729Z',
-            ],
+            userOrganizationResource(),
+            userOrganizationResource(),
         ],
     ];
 }
@@ -92,13 +106,8 @@ function userTransferProjectsResource(): array
 function userAuthDetailsResource(): array
 {
     return [
-        'type' => 'api_key',
-        'user_id' => 'user-123456',
-        'api_key_id' => 'ak-123456789',
-        'created_at' => '2025-07-27T01:45:32.898729Z',
-        'expires_at' => '2025-12-31T23:59:59.000000Z',
-        'scopes' => ['read', 'write'],
-        'last_used_at' => '2025-07-27T01:45:32.898729Z',
-        'last_used_from_addr' => '192.168.1.100',
+        'account_id' => '9d0e0c69-f8b2-4c1a-9d0e-0c69f8b24xxx',
+        'auth_method' => 'api_key_user',
+        'auth_data' => '1234567890abcdef',
     ];
 }

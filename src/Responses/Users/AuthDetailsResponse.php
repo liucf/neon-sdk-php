@@ -14,41 +14,26 @@ final class AuthDetailsResponse implements ResponseContract
     use Fakeable;
 
     private function __construct(
-        public readonly string $type,
-        public readonly string $userId,
-        public readonly string $apiKeyId,
-        public readonly string $createdAt,
-        public readonly ?string $expiresAt,
-        public readonly array $scopes,
-        public readonly ?string $lastUsedAt,
-        public readonly ?string $lastUsedFromAddr,
+        public readonly string $accountId,
+        public readonly string $authMethod,
+        public readonly ?string $authData,
     ) {}
 
     public static function from(array $attributes): self
     {
         return new self(
-            $attributes['type'],
-            $attributes['user_id'],
-            $attributes['api_key_id'],
-            $attributes['created_at'],
-            $attributes['expires_at'] ?? null,
-            $attributes['scopes'],
-            $attributes['last_used_at'] ?? null,
-            $attributes['last_used_from_addr'] ?? null,
+            $attributes['account_id'],
+            $attributes['auth_method'],
+            $attributes['auth_data'] ?? null,
         );
     }
 
     public function toArray(): array
     {
         return [
-            'type' => $this->type,
-            'user_id' => $this->userId,
-            'api_key_id' => $this->apiKeyId,
-            'created_at' => $this->createdAt,
-            'expires_at' => $this->expiresAt,
-            'scopes' => $this->scopes,
-            'last_used_at' => $this->lastUsedAt,
-            'last_used_from_addr' => $this->lastUsedFromAddr,
+            'account_id' => $this->accountId,
+            'auth_method' => $this->authMethod,
+            'auth_data' => $this->authData,
         ];
     }
 }
